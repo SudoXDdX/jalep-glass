@@ -31,11 +31,11 @@
   --glass-tint-bottom: rgba(179, 179, 179, 0.08);
   --glass-tint-top-hover: rgba(255, 255, 255, 0.18);
   --glass-tint-bottom-hover: rgba(179, 179, 179, 0.14);
-  --glass-rim-top: rgba(255, 255, 255, 0.60);
-  --glass-rim-hairline: rgba(255, 255, 255, 0.18);
-  --glass-rim-bottom: rgba(255, 255, 255, 0.10);
-  --glass-border: rgba(255, 255, 255, 0.15);
-  --glass-shadow: 0 20px 48px rgba(0, 0, 0, 0.40);
+  --glass-rim-top: rgba(255, 255, 255, 0.85);
+  --glass-rim-hairline: rgba(255, 255, 255, 0.35);
+  --glass-rim-bottom: rgba(255, 255, 255, 0.20);
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-shadow: 0 20px 48px rgba(0, 0, 0, 0.50), 0 4px 12px rgba(0, 0, 0, 0.25);
 
   /* Menu tier */
   --glass-menu-surface: #16161b;
@@ -122,8 +122,8 @@ body::after {
     inset 0 1px 0 var(--glass-rim-top),
     inset 0 0 0 1px var(--glass-rim-hairline),
     inset 0 -1px 0 var(--glass-rim-bottom) !important;
-  backdrop-filter: blur(28px) saturate(185%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(185%) !important;
+  backdrop-filter: blur(28px) saturate(185%) brightness(0.97) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(185%) brightness(0.97) !important;
   overflow: hidden !important;
   transition:
     transform var(--glass-duration) var(--glass-ease),
@@ -408,8 +408,10 @@ body, p, span, li, div, a {
    Fresnel rim + Edge highlights + Specular
    ══════════════════════════════════════ */
 
-/*1. Fresnel Rim — Bright top/bottom edges, dark sides
-   This is the KEY visual signature of iOS 26 Liquid Glass
+/* 1. Fresnel Rim — BRIGHT top/bottom edges, DARK sides
+   iOS 26 signature: bright specular hairline on horizontal edges,
+   dark refractive shadow on vertical edges.
+   INTENSIFIED for clear visibility.
 */
 .glass-card::before {
   content: '' !important;
@@ -422,24 +424,35 @@ body, p, span, li, div, a {
   background:
     linear-gradient(
       to right,
-      rgba(0, 0, 0, 0.30) 0,
-      rgba(0, 0, 0, 0) 6px,
-      rgba(0, 0, 0, 0) calc(100% - 6px),
-      rgba(0, 0, 0, 0.30) 100%
+      rgba(0, 0, 0, 0.45) 0,
+      rgba(0, 0, 0, 0) 8px,
+      rgba(0, 0, 0, 0) calc(100% - 8px),
+      rgba(0, 0, 0, 0.45) 100%
     ),
     linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0.40) 0,
-      rgba(255, 255, 255, 0.40) 1px,
-      rgba(255, 255, 255, 0) 15px,
-      rgba(255, 255, 255, 0) calc(100% - 15px),
-      rgba(255, 255, 255, 0.30) calc(100% - 1px),
-      rgba(255, 255, 255, 0.30) 100%
+      rgba(255, 255, 255, 0.75) 0,
+      rgba(255, 255, 255, 0.75) 1px,
+      rgba(255, 255, 255, 0) 18px,
+      rgba(255, 255, 255, 0) calc(100% - 18px),
+      rgba(255, 255, 255, 0.55) calc(100% - 1px),
+      rgba(255, 255, 255, 0.55) 100%
     ) !important;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
   -webkit-mask-composite: xor !important;
   mask-composite: exclude !important;
+}
+
+/* 1b. 3D Volume — thick glass depth illusion */
+.glass-card {
+  box-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.55),
+    0 4px 12px rgba(0, 0, 0, 0.25),
+    inset 0 2px 0 rgba(255, 255, 255, 0.85),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.35),
+    inset 0 -2px 0 rgba(255, 255, 255, 0.20),
+    inset 0 -8px 20px rgba(0, 0, 0, 0.08) !important;
 }
 
 /* 2. Neon card rim highlight */
@@ -493,25 +506,44 @@ body, p, span, li, div, a {
   pointer-events: none !important;
 }
 
-/* 4. Interactive specular highlight on hover */
+/* 4. Interactive specular highlight on hover — INTENSIFIED */
 .glass-card:hover::before {
   background:
     linear-gradient(
       to right,
-      rgba(0, 0, 0, 0.25) 0,
-      rgba(0, 0, 0, 0) 6px,
-      rgba(0, 0, 0, 0) calc(100% - 6px),
-      rgba(0, 0, 0, 0.25) 100%
+      rgba(0, 0, 0, 0.40) 0,
+      rgba(0, 0, 0, 0) 8px,
+      rgba(0, 0, 0, 0) calc(100% - 8px),
+      rgba(0, 0, 0, 0.40) 100%
     ),
     linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0.60) 0,
-      rgba(255, 255, 255, 0.60) 1px,
-      rgba(255, 255, 255, 0) 15px,
-      rgba(255, 255, 255, 0) calc(100% - 15px),
-      rgba(255, 255, 255, 0.45) calc(100% - 1px),
-      rgba(255, 255, 255, 0.45) 100%
+      rgba(255, 255, 255, 0.90) 0,
+      rgba(255, 255, 255, 0.90) 1px,
+      rgba(255, 255, 255, 0) 20px,
+      rgba(255, 255, 255, 0) calc(100% - 20px),
+      rgba(255, 255, 255, 0.65) calc(100% - 1px),
+      rgba(255, 255, 255, 0.65) 100%
     ) !important;
+}
+
+/* 5. Nav bar — intensified Fresnel rim */
+.nav-glass {
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.55),
+    0 4px 12px rgba(0, 0, 0, 0.35),
+    inset 0 2px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.20) !important;
+}
+
+/* 6. Neon card — intensified 3D depth */
+.neon-card {
+  box-shadow:
+    0 24px 90px rgba(0, 0, 0, 0.55),
+    0 4px 12px rgba(0, 0, 0, 0.30),
+    inset 0 2px 0 rgba(255, 255, 255, 0.80),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -10px 24px rgba(0, 0, 0, 0.10) !important;
 }
 
 /* Pedro "giselle gulosa, K" — small italic annotation */
