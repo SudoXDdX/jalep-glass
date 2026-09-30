@@ -122,8 +122,8 @@ body::after {
     inset 0 1px 0 var(--glass-rim-top),
     inset 0 0 0 1px var(--glass-rim-hairline),
     inset 0 -1px 0 var(--glass-rim-bottom) !important;
-  backdrop-filter: blur(40px) saturate(200%) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
+  backdrop-filter: blur(28px) saturate(185%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(185%) !important;
   overflow: hidden !important;
   transition:
     transform var(--glass-duration) var(--glass-ease),
@@ -176,8 +176,8 @@ body::after {
     0 24px 90px rgba(0, 0, 0, 0.42),
     inset 0 1px 0 rgba(255, 255, 255, 0.18),
     inset 0 -1px 0 rgba(255, 255, 255, 0.06) !important;
-  backdrop-filter: blur(48px) saturate(210%) !important;
-  -webkit-backdrop-filter: blur(48px) saturate(210%) !important;
+  backdrop-filter: blur(32px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(190%) !important;
 }
 
 .neon-card::before {
@@ -202,8 +202,8 @@ body::after {
 .nav-glass {
   background: color-mix(in srgb, var(--glass-menu-surface) 60%, transparent) !important;
   border-bottom: 1px solid var(--glass-border) !important;
-  backdrop-filter: blur(48px) saturate(210%) !important;
-  -webkit-backdrop-filter: blur(48px) saturate(210%) !important;
+  backdrop-filter: blur(32px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(190%) !important;
   box-shadow:
     var(--glass-menu-shadow),
     inset 0 1px 0 var(--glass-rim-top) !important;
@@ -231,8 +231,8 @@ body::after {
 .footer-glass {
   background: color-mix(in srgb, var(--glass-menu-surface) 45%, transparent) !important;
   border-top: 1px solid var(--glass-border) !important;
-  backdrop-filter: blur(36px) saturate(200%) !important;
-  -webkit-backdrop-filter: blur(36px) saturate(200%) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
 }
 
 /* ══════════════════════════════════════
@@ -241,8 +241,8 @@ body::after {
 .btn-primary {
   border-radius: var(--glass-radius-full) !important;
   background: rgba(243, 238, 227, 0.10) !important;
-  backdrop-filter: blur(28px) saturate(190%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+  backdrop-filter: blur(20px) saturate(175%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(175%) !important;
   border: 1px solid rgba(243, 238, 227, 0.22) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.22),
@@ -294,8 +294,8 @@ body::after {
    TEAM AVATARS — Glass Orbs
    ══════════════════════════════════════ */
 .w-20.h-20.rounded-full {
-  backdrop-filter: blur(22px) saturate(190%) !important;
-  -webkit-backdrop-filter: blur(22px) saturate(190%) !important;
+  backdrop-filter: blur(16px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(170%) !important;
   box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.2),
     inset 0 2px 4px rgba(255, 255, 255, 0.15) !important;
@@ -352,8 +352,8 @@ body::after {
   background: linear-gradient(180deg, var(--glass-tint-top-hover), var(--glass-tint-bottom-hover)) !important;
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
   border-radius: 50% !important;
-  backdrop-filter: blur(22px) saturate(190%) !important;
-  -webkit-backdrop-filter: blur(22px) saturate(190%) !important;
+  backdrop-filter: blur(16px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(170%) !important;
   box-shadow:
     0 8px 24px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 var(--glass-rim-top) !important;
@@ -374,10 +374,160 @@ body::after {
   color: rgb(var(--primary) / 0.7) !important;
 }
 
-/* Pedro annotation: "giselle gulosa, K" in small italic */
+
+/* ══════════════════════════════════════
+   GOOGLE SANS FLEX — Primary typeface
+   6 axes: wght, wdth, opsz, GRAD, ROND, slnt
+   ══════════════════════════════════════ */
+:root {
+  --font-sans: 'Google Sans Flex', sans-serif;
+  --font-heading: 'Google Sans Flex', sans-serif;
+}
+
+body, p, span, li, h1, h2, h3, h4, h5, h6, a, button, input, textarea, select, label, td, th, div {
+  font-family: var(--font-sans) !important;
+}
+
+h1, h2, h3 {
+  font-variation-settings: "wght" 700, "opsz" 48, "ROND" 25;
+  font-optical-sizing: auto;
+}
+
+h4, h5, h6 {
+  font-variation-settings: "wght" 600, "opsz" 24, "ROND" 15;
+  font-optical-sizing: auto;
+}
+
+body, p, span, li, div, a {
+  font-variation-settings: "wght" 400, "opsz" 16, "ROND" 12;
+  font-optical-sizing: auto;
+}
+
+/* ══════════════════════════════════════
+   LIQUID GLASS ENHANCEMENTS — iOS 26 Style
+   Fresnel rim + Edge highlights + Specular
+   ══════════════════════════════════════ */
+
+/*1. Fresnel Rim — Bright top/bottom edges, dark sides
+   This is the KEY visual signature of iOS 26 Liquid Glass
+*/
+.glass-card::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+  border-radius: inherit !important;
+  padding: 1px !important;
+  background:
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.30) 0,
+      rgba(0, 0, 0, 0) 6px,
+      rgba(0, 0, 0, 0) calc(100% - 6px),
+      rgba(0, 0, 0, 0.30) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.40) 0,
+      rgba(255, 255, 255, 0.40) 1px,
+      rgba(255, 255, 255, 0) 15px,
+      rgba(255, 255, 255, 0) calc(100% - 15px),
+      rgba(255, 255, 255, 0.30) calc(100% - 1px),
+      rgba(255, 255, 255, 0.30) 100%
+    ) !important;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
+  -webkit-mask-composite: xor !important;
+  mask-composite: exclude !important;
+}
+
+/* 2. Neon card rim highlight */
+.neon-card::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+  border-radius: inherit !important;
+  padding: 1px !important;
+  background:
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.25) 0,
+      rgba(0, 0, 0, 0) 5px,
+      rgba(0, 0, 0, 0) calc(100% - 5px),
+      rgba(0, 0, 0, 0.25) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.50) 0,
+      rgba(255, 255, 255, 0.50) 1px,
+      rgba(255, 255, 255, 0) 12px,
+      rgba(255, 255, 255, 0) calc(100% - 12px),
+      rgba(255, 255, 255, 0.35) calc(100% - 17px),
+      rgba(255, 255, 255, 0.35) 100%
+    ) !important;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
+  -webkit-mask-composite: xor !9important;
+  mask-composite: exclude !important;
+}
+
+/* 3. Nav bar rim — bottom edge highlight */
+.nav-glass::after {
+  content: '' !important;
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 1px !important;
+  background: linear-gradient(
+    to right,
+    transparent 5%,
+    rgba(255, 255, 255, 0.15) 20%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0.15) 80%,
+    transparent 95%
+  ) !important;
+  pointer-events: none !important;
+}
+
+/* 4. Interactive specular highlight on hover */
+.glass-card:hover::before {
+  background:
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.25) 0,
+      rgba(0, 0, 0, 0) 6px,
+      rgba(0, 0, 0, 0) calc(100% - 6px),
+      rgba(0, 0, 0, 0.25) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.60) 0,
+      rgba(255, 255, 255, 0.60) 1px,
+      rgba(255, 255, 255, 0) 15px,
+      rgba(255, 255, 255, 0) calc(100% - 15px),
+      rgba(255, 255, 255, 0.45) calc(100% - 1px),
+      rgba(255, 255, 255, 0.45) 100%
+    ) !important;
+}
+
+/* Pedro "giselle gulosa, K" — small italic annotation */
 .glass-card.p-6.h-full.flex.flex-col:nth-child(5) p.text-sm {
   position: relative;
 }
+
+.glass-card.p-6.h-full.flex.flex-col:nth-child(5) p.text-sm::after {
+  content: '';
+  display: block;
+  font-style: italic;
+  font-size: 0.5rem;
+  opacity: 0.4;
+  margin-top: 0.2rem;
+}
+
 
 /* ══════════════════════════════════════
    FLEXBOX MASONRY
