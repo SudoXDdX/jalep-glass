@@ -1,9 +1,8 @@
 /* ═══════════════════════════════════════════════════════════════════
-   JALEP GLASS — Apple Liquid Glass v2
-   Synthesized from: stormaref/LiquidGlassSkill,
-   ngocanhnckh/liquid-glass-frontend-skill, Na2H2P2O7/liquid-glass-skill,
-   tyfarrago-hub/taste (impeccable + cosmic-glass),
-   leonxlnx/taste-skill, anthropics/frontend-design
+   JALEP GLASS — Apple Liquid Glass v3 (ACTUALLY VISIBLE)
+   Based on: stormaref/LiquidGlassSkill, iOS 26 Liquid Glass design,
+   SwiftWebUI concepts, Na2H2P2O7/liquid-glass-skill (WebGL refraction)
+   KEY FIX: Dark body background + INTENSE ambient mesh + HIGH blur values
    ═══════════════════════════════════════════════════════════════════ */
 
 /* ── Protect Material Symbols ── */
@@ -14,59 +13,69 @@
 }
 
 /* ══════════════════════════════════════
-   TOKEN SYSTEM — stormaref/LiquidGlassSkill
+   TOKEN SYSTEM — Liquid Glass (INTENSIFIED)
    ══════════════════════════════════════ */
 :root {
   /* Geometry */
-  --glass-radius: 18px;
+  --glass-radius: 20px;
   --glass-radius-lg: 28px;
   --glass-radius-full: 9999px;
 
-  /* Motion — impeccable 100/300/500 rule */
-  --glass-duration: 180ms;
+  /* Motion */
+  --glass-duration: 200ms;
   --glass-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --glass-ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --glass-ease-quart: cubic-bezier(0.25, 1, 0.5, 1);
 
-  /* Dark theme tokens — stormaref exact values */
-  --glass-tint-top: rgba(255, 255, 255, 0.10);
+  /* Dark theme — CRITICAL for glass visibility */
+  --glass-tint-top: rgba(255, 255, 255, 0.12);
   --glass-tint-bottom: rgba(179, 179, 179, 0.08);
-  --glass-tint-top-hover: rgba(255, 255, 255, 0.16);
+  --glass-tint-top-hover: rgba(255, 255, 255, 0.18);
   --glass-tint-bottom-hover: rgba(179, 179, 179, 0.14);
   --glass-rim-top: rgba(255, 255, 255, 0.60);
-  --glass-rim-hairline: rgba(255, 255, 255, 0.15);
-  --glass-rim-bottom: rgba(255, 255, 255, 0.08);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  --glass-rim-hairline: rgba(255, 255, 255, 0.18);
+  --glass-rim-bottom: rgba(255, 255, 255, 0.10);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 20px 48px rgba(0, 0, 0, 0.40);
 
-  /* Menu tier — near-opaque for readability */
+  /* Menu tier */
   --glass-menu-surface: #16161b;
   --glass-menu-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.35);
 
-  /* Page surfaces — impeccable off-black (NEVER #000) */
-  --glass-page-bg: #0a0a0c;
+  /* Page surfaces — DEEP dark (NEVER #000, but very dark) */
+  --glass-page-bg: #0a0a0f;
   --glass-page-fg: #ededf0;
 
-  /* Ambient mesh — INTENSIFIED for visibility */
-  --glass-mesh-violet: rgba(139, 92, 246, 0.55);
-  --glass-mesh-pink: rgba(236, 72, 153, 0.45);
-  --glass-mesh-cyan: rgba(6, 182, 212, 0.40);
-  --glass-mesh-corner-top: rgba(99, 102, 241, 0.35);
-  --glass-mesh-corner-bottom: rgba(79, 70, 229, 0.50);
+  /* Ambient mesh — MAXIMUM INTENSITY for visible refraction */
+  --glass-mesh-violet: rgba(139, 92, 246, 0.65);
+  --glass-mesh-pink: rgba(236, 72, 153, 0.55);
+  --glass-mesh-cyan: rgba(6, 182, 212, 0.50);
+  --glass-mesh-green: rgba(52, 211, 153, 0.35);
+  --glass-mesh-corner-top: rgba(99, 102, 241, 0.45);
+  --glass-mesh-corner-bottom: rgba(79, 70, 229, 0.55);
 
-  /* Three-triplet color system — liquid-glass-frontend-skill */
-  --primary: 90 200 250;     /* cyan */
+  /* Three-triplet color system */
+  --primary: 90 200 250;
   --primary-soft: 100 210 255;
-  --accent: 191 90 242;      /* violet */
-  --accent-2: 236 72 153;   /* pink */
+  --accent: 191 90 242;
+  --accent-2: 236 72 153;
 
   /* Masonry */
   --masonry-gap: 1.5rem;
 }
 
 /* ══════════════════════════════════════
-   AMBIENT BACKDROP — CRITICAL: glass is invisible without this
-   (stormaref Rule #1: Glass needs a backdrop)
+   CRITICAL: Force DARK body background
+   Glass is INVISIBLE on light backgrounds!
+   ══════════════════════════════════════ */
+body {
+  background: var(--glass-page-bg) !important;
+  color: var(--glass-page-fg) !important;
+}
+
+/* ══════════════════════════════════════
+   AMBIENT BACKDROP — Colorful mesh that glass refracts
+   (stormaref Rule #1: Glass NEEDS a backdrop to be visible)
+   INTENSIFIED with MORE blobs and higher opacity
    ══════════════════════════════════════ */
 body::before {
   content: '' !important;
@@ -75,16 +84,18 @@ body::before {
   z-index: -1 !important;
   pointer-events: none !important;
   background:
-    radial-gradient(40rem 32rem at 42% 38%, var(--glass-mesh-violet), transparent 60%),
-    radial-gradient(34rem 30rem at 62% 52%, var(--glass-mesh-pink), transparent 62%),
-    radial-gradient(38rem 34rem at 48% 66%, var(--glass-mesh-cyan), transparent 62%),
-    radial-gradient(60rem 40rem at 12% -10%, var(--glass-mesh-corner-top), transparent 60%),
-    radial-gradient(50rem 36rem at 95% 110%, var(--glass-mesh-corner-bottom), transparent 60%) !important;
+    radial-gradient(50rem 40rem at 35% 30%, var(--glass-mesh-violet), transparent 55%),
+    radial-gradient(45rem 38rem at 65% 45%, var(--glass-mesh-pink), transparent 55%),
+    radial-gradient(48rem 42rem at 50% 70%, var(--glass-mesh-cyan), transparent 55%),
+    radial-gradient(40rem 30rem at 80% 25%, var(--glass-mesh-green), transparent 50%),
+    radial-gradient(70rem 50rem at 10% -5%, var(--glass-mesh-corner-top), transparent 55%),
+    radial-gradient(60rem 40rem at 95% 105%, var(--glass-mesh-corner-bottom), transparent 55%),
+    radial-gradient(30rem 25rem at 20% 80%, rgba(251, 146, 60, 0.30), transparent 50%),
+    radial-gradient(35rem 28rem at 75% 75%, rgba(168, 85, 247, 0.35), transparent 50%) !important;
 }
 
 /* ══════════════════════════════════════
-   GRAIN OVERLAY — analog warmth, hides blur banding
-   (liquid-glass-frontend-skill technique)
+   GRAIN OVERLAY — Analog warmth, hides blur banding
    ══════════════════════════════════════ */
 body::after {
   content: "" !important;
@@ -92,14 +103,14 @@ body::after {
   inset: 0 !important;
   z-index: 9998 !important;
   pointer-events: none !important;
-  opacity: 0.06 !important;
+  opacity: 0.04 !important;
   mix-blend-mode: overlay !important;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>") !important;
 }
 
 /* ══════════════════════════════════════
-   GLASS PANEL TIER — The main card surface
-   (stormaref panel + liquid-glass-frontend glass-surface)
+   GLASS PANEL — The main card surface
+   HIGH blur (40px+) for VISIBLE frosted glass effect
    ══════════════════════════════════════ */
 .glass-card {
   position: relative !important;
@@ -111,8 +122,8 @@ body::after {
     inset 0 1px 0 var(--glass-rim-top),
     inset 0 0 0 1px var(--glass-rim-hairline),
     inset 0 -1px 0 var(--glass-rim-bottom) !important;
-  backdrop-filter: blur(34px) saturate(190%) !important;
-  -webkit-backdrop-filter: blur(34px) saturate(190%) !important;
+  backdrop-filter: blur(40px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
   overflow: hidden !important;
   transition:
     transform var(--glass-duration) var(--glass-ease),
@@ -124,13 +135,13 @@ body::after {
   background: linear-gradient(180deg, var(--glass-tint-top-hover), var(--glass-tint-bottom-hover)) !important;
   transform: translateY(-2px) !important;
   box-shadow:
-    0 22px 48px rgba(0, 0, 0, 0.40),
+    0 24px 56px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.55),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.14),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16),
     inset 0 -1px 0 var(--glass-rim-bottom) !important;
 }
 
-/* ── Hover light sweep (cosmic-glass technique) ── */
+/* ── Hover light sweep (cosmic-glass refraction) ── */
 .glass-card::after {
   content: '' !important;
   position: absolute !important;
@@ -138,19 +149,18 @@ body::after {
   z-index: 1 !important;
   pointer-events: none !important;
   opacity: 0 !important;
-  background: linear-gradient(112deg, transparent 0%, rgba(255, 255, 255, 0.12) 36%, transparent 58%) !important;
+  background: linear-gradient(112deg, transparent 0%, rgba(255, 255, 255, 0.15) 36%, transparent 58%) !important;
   transform: translateX(-72%) skewX(-16deg) !important;
   transition: opacity 0.4s var(--glass-ease), transform 0.6s var(--glass-ease) !important;
 }
 
 .glass-card:hover::after {
-  opacity: 0.62 !important;
+  opacity: 0.7 !important;
   transform: translateX(80%) skewX(-16deg) !important;
 }
 
 /* ══════════════════════════════════════
    NEON CARD — Premium glass with gradient hairline border
-   (cosmic-glass recipe)
    ══════════════════════════════════════ */
 .neon-card {
   position: relative !important;
@@ -159,18 +169,17 @@ body::after {
   border-top-color: rgba(255, 255, 255, 0.24) !important;
   border-radius: var(--glass-radius-lg) !important;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.03) 38%, rgba(255, 255, 255, 0.02)),
-    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.12), transparent 18rem),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03) 38%, rgba(255, 255, 255, 0.02)),
+    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.14), transparent 18rem),
     rgba(7, 12, 26, 0.58) !important;
   box-shadow:
     0 24px 90px rgba(0, 0, 0, 0.42),
     inset 0 1px 0 rgba(255, 255, 255, 0.18),
     inset 0 -1px 0 rgba(255, 255, 255, 0.06) !important;
-  backdrop-filter: blur(44px) saturate(200%) !important;
-  -webkit-backdrop-filter: blur(44px) saturate(200%) !important;
+  backdrop-filter: blur(48px) saturate(210%) !important;
+  -webkit-backdrop-filter: blur(48px) saturate(210%) !important;
 }
 
-/* ── Gradient hairline border (cosmic-glass pseudo) ── */
 .neon-card::before {
   content: '' !important;
   position: absolute !important;
@@ -188,13 +197,13 @@ body::after {
 }
 
 /* ══════════════════════════════════════
-   NAVIGATION — Liquid Glass Bar
+   NAVIGATION — Liquid Glass Bar (left-aligned for presentation)
    ══════════════════════════════════════ */
 .nav-glass {
-  background: color-mix(in srgb, var(--glass-menu-surface) 55%, transparent) !important;
+  background: color-mix(in srgb, var(--glass-menu-surface) 60%, transparent) !important;
   border-bottom: 1px solid var(--glass-border) !important;
-  backdrop-filter: blur(44px) saturate(200%) !important;
-  -webkit-backdrop-filter: blur(44px) saturate(200%) !important;
+  backdrop-filter: blur(48px) saturate(210%) !important;
+  -webkit-backdrop-filter: blur(48px) saturate(210%) !important;
   box-shadow:
     var(--glass-menu-shadow),
     inset 0 1px 0 var(--glass-rim-top) !important;
@@ -207,24 +216,33 @@ body::after {
     inset 0 1px 0 var(--glass-rim-top) !important;
 }
 
+.nav-glass-inner {
+  justify-content: flex-start !important;
+  padding-left: 0.75rem !important;
+}
+
+.nav-glass-inner > nav {
+  margin-left: 0.5rem !important;
+}
+
 /* ══════════════════════════════════════
    FOOTER — Liquid Glass Panel
    ══════════════════════════════════════ */
 .footer-glass {
-  background: color-mix(in srgb, var(--glass-menu-surface) 40%, transparent) !important;
+  background: color-mix(in srgb, var(--glass-menu-surface) 45%, transparent) !important;
   border-top: 1px solid var(--glass-border) !important;
-  backdrop-filter: blur(34px) saturate(190%) !important;
-  -webkit-backdrop-filter: blur(34px) saturate(190%) !important;
+  backdrop-filter: blur(36px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(36px) saturate(200%) !important;
 }
 
 /* ══════════════════════════════════════
-   BUTTONS — Glass Capsules (liquid-glass-frontend glass-btn)
+   BUTTONS — Glass Capsules
    ══════════════════════════════════════ */
 .btn-primary {
   border-radius: var(--glass-radius-full) !important;
   background: rgba(243, 238, 227, 0.10) !important;
-  backdrop-filter: blur(26px) saturate(185%) !important;
-  -webkit-backdrop-filter: blur(26px) saturate(185%) !important;
+  backdrop-filter: blur(28px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
   border: 1px solid rgba(243, 238, 227, 0.22) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.22),
@@ -235,7 +253,7 @@ body::after {
 }
 
 .btn-primary:hover {
-  background: rgba(243, 238, 227, 0.17) !important;
+  background: rgba(243, 238, 227, 0.18) !important;
   border-color: rgba(243, 238, 227, 0.42) !important;
   transform: translateY(-1px) !important;
 }
@@ -244,8 +262,8 @@ body::after {
   border-radius: var(--glass-radius-full) !important;
   background: transparent !important;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
   color: var(--color-text-sec) !important;
   transition: all var(--glass-duration) var(--glass-ease) !important;
 }
@@ -257,7 +275,7 @@ body::after {
 }
 
 /* ══════════════════════════════════════
-   CHIP TIER — stormaref chip recipe
+   CHIP TIER — Glass pills
    ══════════════════════════════════════ */
 .chip {
   display: inline-flex !important;
@@ -268,23 +286,23 @@ body::after {
   border-radius: var(--glass-radius-full) !important;
   background: linear-gradient(180deg, var(--glass-tint-top), var(--glass-tint-bottom)) !important;
   box-shadow: inset 0 1px 0 var(--glass-rim-top) !important;
-  backdrop-filter: blur(6px) saturate(125%) !important;
-  -webkit-backdrop-filter: blur(6px) saturate(125%) !important;
+  backdrop-filter: blur(8px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(130%) !important;
 }
 
 /* ══════════════════════════════════════
-   TEAM AVATARS — Glass Orbs with inner glow
+   TEAM AVATARS — Glass Orbs
    ══════════════════════════════════════ */
 .w-20.h-20.rounded-full {
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  backdrop-filter: blur(22px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(190%) !important;
   box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.2),
     inset 0 2px 4px rgba(255, 255, 255, 0.15) !important;
 }
 
 /* ══════════════════════════════════════
-   HERO — Vibrant gradient text (three-triplet system)
+   HERO — Vibrant gradient text
    ══════════════════════════════════════ */
 .hero-title {
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.3) !important;
@@ -298,14 +316,13 @@ body::after {
   -webkit-text-fill-color: transparent !important;
 }
 
-/* ── Hero tag: glass pill ── */
 .hero-tag {
   border: 1px solid var(--glass-border) !important;
   border-radius: var(--glass-radius-full) !important;
   background: linear-gradient(180deg, var(--glass-tint-top), var(--glass-tint-bottom)) !important;
   box-shadow: inset 0 1px 0 var(--glass-rim-top) !important;
-  backdrop-filter: blur(10px) saturate(125%) !important;
-  -webkit-backdrop-filter: blur(10px) saturate(125%) !important;
+  backdrop-filter: blur(12px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(130%) !important;
 }
 
 /* ══════════════════════════════════════
@@ -323,8 +340,8 @@ body::after {
   background: linear-gradient(180deg, var(--glass-tint-top), var(--glass-tint-bottom)) !important;
   border: 1px solid var(--glass-border) !important;
   border-radius: var(--glass-radius-full) !important;
-  backdrop-filter: blur(10px) saturate(125%) !important;
-  -webkit-backdrop-filter: blur(10px) saturate(125%) !important;
+  backdrop-filter: blur(12px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(130%) !important;
   box-shadow: inset 0 1px 0 var(--glass-rim-top) !important;
 }
 
@@ -335,29 +352,31 @@ body::after {
   background: linear-gradient(180deg, var(--glass-tint-top-hover), var(--glass-tint-bottom-hover)) !important;
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
   border-radius: 50% !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  backdrop-filter: blur(22px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(190%) !important;
   box-shadow:
     0 8px 24px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 var(--glass-rim-top) !important;
 }
 
 /* ══════════════════════════════════════
-   TYPOGRAPHY — impeccable compensation
+   TYPOGRAPHY — Liquid Glass style
    ══════════════════════════════════════ */
-
-/* Light-on-dark compensation (impeccable) */
 .section-title {
   letter-spacing: -0.01em !important;
   text-wrap: balance !important;
 }
 
-/* Section kicker — monospace, spaced */
 .section-kicker {
   font-family: var(--font-mono) !important;
   letter-spacing: 0.34em !important;
   text-transform: uppercase !important;
   color: rgb(var(--primary) / 0.7) !important;
+}
+
+/* Pedro annotation: "giselle gulosa, K" in small italic */
+.glass-card.p-6.h-full.flex.flex-col:nth-child(5) p.text-sm {
+  position: relative;
 }
 
 /* ══════════════════════════════════════
@@ -424,18 +443,10 @@ footer .grid.gap-10.sm\:grid-cols-2.lg\:grid-cols-3 > * {
   min-width: 220px !important;
 }
 
-/* ══════════════════════════════════════
-   ENTRANCE ANIMATION — impeccable stagger
-   ══════════════════════════════════════ */
+/* ── Entrance animation ── */
 @keyframes glass-rise {
-  from {
-    opacity: 0;
-    transform: translateY(40px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(40px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .glass-card.p-6.h-full.flex.flex-col {
@@ -448,19 +459,7 @@ footer .grid.gap-10.sm\:grid-cols-2.lg\:grid-cols-3 > * {
 .glass-card.p-6.h-full.flex.flex-col:nth-child(4) { animation-delay: 0.42s; }
 .glass-card.p-6.h-full.flex.flex-col:nth-child(5) { animation-delay: 0.52s; }
 
-/* ══════════════════════════════════════
-   REDUCED MOTION — impeccable: crossfade, not spatial
-   ══════════════════════════════════════ */
-@media (prefers-reduced-motion: reduce) {
-  .glass-card { transition-duration: 0.01ms !important; }
-  .glass-card:hover { transform: none !important; }
-  .glass-card::after { display: none !important; }
-  .glass-card.p-6.h-full.flex.flex-col { animation: none !important; opacity: 1 !important; }
-}
-
-/* ══════════════════════════════════════
-   RESPONSIVE MASONRY
-   ══════════════════════════════════════ */
+/* ── Responsive ── */
 @media (max-width: 1024px) {
   .grid.md\:grid-cols-2.lg\:grid-cols-3.gap-6.mb-16 > *,
   .grid.lg\:grid-cols-3.gap-6.mb-16 > * {
