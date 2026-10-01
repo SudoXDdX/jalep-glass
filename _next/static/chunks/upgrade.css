@@ -1,8 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════════
-   JALEP GLASS — Apple Liquid Glass v3 (ACTUALLY VISIBLE)
-   Based on: stormaref/LiquidGlassSkill, iOS 26 Liquid Glass design,
-   SwiftWebUI concepts, Na2H2P2O7/liquid-glass-skill (WebGL refraction)
-   KEY FIX: Dark body background + INTENSE ambient mesh + HIGH blur values
+   JALEP GLASS — Apple Liquid Glass v4 (REDUCED BLUR + SVG REFRACTION)
+   Based on: iOS 26 Liquid Glass, archisvaze/liquid-glass, hyalite
+   SVG feDisplacementMap refraction + Fresnel rim + Edge highlights
    ═══════════════════════════════════════════════════════════════════ */
 
 /* ── Protect Material Symbols ── */
@@ -12,21 +11,15 @@
   font-weight: normal !important;
 }
 
-/* ══════════════════════════════════════
-   TOKEN SYSTEM — Liquid Glass (INTENSIFIED)
-   ══════════════════════════════════════ */
+/* ════════════════════════
+   TOKEN SYSTEM
+   ════════════════════════ */
 :root {
-  /* Geometry */
   --glass-radius: 20px;
   --glass-radius-lg: 28px;
   --glass-radius-full: 9999px;
-
-  /* Motion */
   --glass-duration: 200ms;
   --glass-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --glass-ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
-
-  /* Dark theme — CRITICAL for glass visibility */
   --glass-tint-top: rgba(255, 255, 255, 0.12);
   --glass-tint-bottom: rgba(179, 179, 179, 0.08);
   --glass-tint-top-hover: rgba(255, 255, 255, 0.18);
@@ -35,48 +28,29 @@
   --glass-rim-hairline: rgba(255, 255, 255, 0.35);
   --glass-rim-bottom: rgba(255, 255, 255, 0.20);
   --glass-border: rgba(255, 255, 255, 0.22);
-  --glass-shadow: 0 20px 48px rgba(0, 0, 0, 0.50), 0 4px 12px rgba(0, 0, 0, 0.25);
-
-  /* Menu tier */
   --glass-menu-surface: #16161b;
-  --glass-menu-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.35);
-
-  /* Page surfaces — DEEP dark (NEVER #000, but very dark) */
   --glass-page-bg: #0a0a0f;
   --glass-page-fg: #ededf0;
-
-  /* Ambient mesh — MAXIMUM INTENSITY for visible refraction */
   --glass-mesh-violet: rgba(139, 92, 246, 0.65);
   --glass-mesh-pink: rgba(236, 72, 153, 0.55);
   --glass-mesh-cyan: rgba(6, 182, 212, 0.50);
   --glass-mesh-green: rgba(52, 211, 153, 0.35);
   --glass-mesh-corner-top: rgba(99, 102, 241, 0.45);
   --glass-mesh-corner-bottom: rgba(79, 70, 229, 0.55);
-
-  /* Three-triplet color system */
   --primary: 90 200 250;
   --primary-soft: 100 210 255;
   --accent: 191 90 242;
   --accent-2: 236 72 153;
-
-  /* Masonry */
   --masonry-gap: 1.5rem;
 }
 
-/* ══════════════════════════════════════
-   CRITICAL: Force DARK body background
-   Glass is INVISIBLE on light backgrounds!
-   ══════════════════════════════════════ */
+/* DARK body */
 body {
   background: var(--glass-page-bg) !important;
   color: var(--glass-page-fg) !important;
 }
 
-/* ══════════════════════════════════════
-   AMBIENT BACKDROP — Colorful mesh that glass refracts
-   (stormaref Rule #1: Glass NEEDS a backdrop to be visible)
-   INTENSIFIED with MORE blobs and higher opacity
-   ══════════════════════════════════════ */
+/* AMBIENT MESH */
 body::before {
   content: '' !important;
   position: fixed !important;
@@ -94,9 +68,7 @@ body::before {
     radial-gradient(35rem 28rem at 75% 75%, rgba(168, 85, 247, 0.35), transparent 50%) !important;
 }
 
-/* ══════════════════════════════════════
-   GRAIN OVERLAY — Analog warmth, hides blur banding
-   ══════════════════════════════════════ */
+/* GRAIN OVERLAY */
 body::after {
   content: "" !important;
   position: fixed !important;
@@ -108,20 +80,19 @@ body::after {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>") !important;
 }
 
-/* ══════════════════════════════════════
-   GLASS PANEL — The main card surface
-   HIGH blur (40px+) for VISIBLE frosted glass effect
-   ══════════════════════════════════════ */
+/* ═══ GLASS CARD ═══ */
 .glass-card {
   position: relative !important;
   border: 1px solid var(--glass-border) !important;
   border-radius: var(--glass-radius) !important;
   background: linear-gradient(180deg, var(--glass-tint-top), var(--glass-tint-bottom)) !important;
   box-shadow:
-    var(--glass-shadow),
-    inset 0 1px 0 var(--glass-rim-top),
-    inset 0 0 0 1px var(--glass-rim-hairline),
-    inset 0 -1px 0 var(--glass-rim-bottom) !important;
+    0 20px 48px rgba(0, 0, 0, 0.50),
+    0 4px 12px rgba(0, 0, 0, 0.25),
+    inset 0 2px 0 rgba(255, 255, 255, 0.85),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.35),
+    inset 0 -2px 0 rgba(255, 255, 255, 0.20),
+    inset 0 -8px 20px rgba(0, 0, 0, 0.08) !important;
   backdrop-filter: blur(20px) saturate(185%) brightness(0.97) !important;
   -webkit-backdrop-filter: blur(20px) saturate(185%) brightness(0.97) !important;
   overflow: hidden !important;
@@ -141,7 +112,25 @@ body::after {
     inset 0 -1px 0 var(--glass-rim-bottom) !important;
 }
 
-/* ── Hover light sweep (cosmic-glass refraction) ── */
+/* Fresnel rim highlight */
+.glass-card::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+  border-radius: inherit !important;
+  padding: 1px !important;
+  background:
+    linear-gradient(to right, rgba(0,0,0,0.45) 0, rgba(0,0,0,0) 8px, rgba(0,0,0,0) calc(100% - 8px), rgba(0,0,0,0.45) 100%),
+    linear-gradient(to bottom, rgba(255,255,255,0.75) 0, rgba(255,255,255,0.75) 1px, rgba(255,255,255,0) 18px, rgba(255,255,255,0) calc(100% - 18px), rgba(255,255,255,0.55) calc(100% - 1px), rgba(255,255,255,0.55) 100%) !important;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
+  -webkit-mask-composite: xor !important;
+  mask-composite: exclude !important;
+}
+
+/* Hover light sweep */
 .glass-card::after {
   content: '' !important;
   position: absolute !important;
@@ -149,7 +138,7 @@ body::after {
   z-index: 1 !important;
   pointer-events: none !important;
   opacity: 0 !important;
-  background: linear-gradient(112deg, transparent 0%, rgba(255, 255, 255, 0.15) 36%, transparent 58%) !important;
+  background: linear-gradient(112deg, transparent 0%, rgba(255,255,255,0.15) 36%, transparent 58%) !important;
   transform: translateX(-72%) skewX(-16deg) !important;
   transition: opacity 0.4s var(--glass-ease), transform 0.6s var(--glass-ease) !important;
 }
@@ -159,23 +148,21 @@ body::after {
   transform: translateX(80%) skewX(-16deg) !important;
 }
 
-/* ══════════════════════════════════════
-   NEON CARD — Premium glass with gradient hairline border
-   ══════════════════════════════════════ */
+/* ═══ NEON CARD ═══ */
 .neon-card {
   position: relative !important;
   overflow: hidden !important;
   border: 1px solid var(--glass-border) !important;
-  border-top-color: rgba(255, 255, 255, 0.24) !important;
+  border-top-color: rgba(255,255,255,0.24) !important;
   border-radius: var(--glass-radius-lg) !important;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03) 38%, rgba(255, 255, 255, 0.02)),
-    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.14), transparent 18rem),
+    linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.03) 38%, rgba(255,255,255,0.02)),
+    radial-gradient(circle at 18% 0%, rgba(255,255,255,0.14), transparent 18rem),
     rgba(7, 12, 26, 0.58) !important;
   box-shadow:
-    0 24px 90px rgba(0, 0, 0, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.06) !important;
+    0 24px 90px rgba(0,0,0,0.42),
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    inset 0 -1px 0 rgba(255,255,255,0.06) !important;
   backdrop-filter: blur(22px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(22px) saturate(190%) !important;
 }
@@ -188,32 +175,25 @@ body::after {
   border-radius: inherit !important;
   padding: 1px !important;
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.42), transparent 32%, rgb(var(--accent) / 0.18) 58%, rgb(var(--accent-2) / 0.20)),
-    radial-gradient(circle at 88% 8%, rgba(255, 255, 255, 0.22), transparent 8rem) !important;
+    linear-gradient(135deg, rgba(255,255,255,0.42), transparent 32%, rgb(var(--accent) / 0.18) 58%, rgb(var(--accent-2) / 0.20)),
+    radial-gradient(circle at 88% 8%, rgba(255,255,255,0.22), transparent 8rem) !important;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
   mask-composite: exclude !important;
   -webkit-mask-composite: xor !important;
   pointer-events: none !important;
 }
 
-/* ══════════════════════════════════════
-   NAVIGATION — Liquid Glass Bar (left-aligned for presentation)
-   ══════════════════════════════════════ */
+/* ═══ NAVIGATION ═══ */
 .nav-glass {
   background: color-mix(in srgb, var(--glass-menu-surface) 60%, transparent) !important;
   border-bottom: 1px solid var(--glass-border) !important;
   backdrop-filter: blur(22px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(22px) saturate(190%) !important;
   box-shadow:
-    var(--glass-menu-shadow),
-    inset 0 1px 0 var(--glass-rim-top) !important;
-}
-
-.nav-glass.scrolled {
-  box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.60),
-    0 4px 12px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 var(--glass-rim-top) !important;
+    0 16px 40px rgba(0,0,0,0.55),
+    0 4px 12px rgba(0,0,0,0.35),
+    inset 0 2px 0 rgba(255,255,255,0.85),
+    inset 0 -1px 0 rgba(255,255,255,0.20) !important;
 }
 
 .nav-glass-inner {
@@ -225,9 +205,18 @@ body::after {
   margin-left: 0.5rem !important;
 }
 
-/* ══════════════════════════════════════
-   FOOTER — Liquid Glass Panel
-   ══════════════════════════════════════ */
+.nav-glass::after {
+  content: '' !important;
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 1px !important;
+  background: linear-gradient(to right, transparent 5%, rgba(255,255,255,0.15) 20%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.15) 80%, transparent 95%) !important;
+  pointer-events: none !important;
+}
+
+/* ═══ FOOTER ═══ */
 .footer-glass {
   background: color-mix(in srgb, var(--glass-menu-surface) 45%, transparent) !important;
   border-top: 1px solid var(--glass-border) !important;
@@ -235,33 +224,28 @@ body::after {
   -webkit-backdrop-filter: blur(17px) saturate(180%) !important;
 }
 
-/* ══════════════════════════════════════
-   BUTTONS — Glass Capsules
-   ══════════════════════════════════════ */
+/* ═══ BUTTONS ═══ */
 .btn-primary {
   border-radius: var(--glass-radius-full) !important;
-  background: rgba(243, 238, 227, 0.10) !important;
+  background: rgba(243,238,227,0.10) !important;
   backdrop-filter: blur(14px) saturate(175%) !important;
   -webkit-backdrop-filter: blur(14px) saturate(175%) !important;
-  border: 1px solid rgba(243, 238, 227, 0.22) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    inset 0 -8px 18px rgba(0, 0, 0, 0.10),
-    0 10px 30px -14px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(243,238,227,0.22) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -8px 18px rgba(0,0,0,0.10), 0 10px 30px -14px rgba(0,0,0,0.5) !important;
   color: var(--color-text) !important;
   transition: all var(--glass-duration) var(--glass-ease) !important;
 }
 
 .btn-primary:hover {
-  background: rgba(243, 238, 227, 0.18) !important;
-  border-color: rgba(243, 238, 227, 0.42) !important;
+  background: rgba(243,238,227,0.18) !important;
+  border-color: rgba(243,238,227,0.42) !important;
   transform: translateY(-1px) !important;
 }
 
 .btn-ghost {
   border-radius: var(--glass-radius-full) !important;
   background: transparent !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
   backdrop-filter: blur(8px) !important;
   -webkit-backdrop-filter: blur(8px) !important;
   color: var(--color-text-sec) !important;
@@ -269,14 +253,12 @@ body::after {
 }
 
 .btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.06) !important;
-  border-color: rgba(255, 255, 255, 0.22) !important;
+  background: rgba(255,255,255,0.06) !important;
+  border-color: rgba(255,255,255,0.22) !important;
   color: var(--color-text) !important;
 }
 
-/* ══════════════════════════════════════
-   CHIP TIER — Glass pills
-   ══════════════════════════════════════ */
+/* ═══ CHIPS ═══ */
 .chip {
   display: inline-flex !important;
   align-items: center !important;
@@ -290,22 +272,16 @@ body::after {
   -webkit-backdrop-filter: blur(6px) saturate(130%) !important;
 }
 
-/* ══════════════════════════════════════
-   TEAM AVATARS — Glass Orbs
-   ══════════════════════════════════════ */
+/* ═══ TEAM AVATARS ═══ */
 .w-20.h-20.rounded-full {
   backdrop-filter: blur(11px) saturate(170%) !important;
   -webkit-backdrop-filter: blur(11px) saturate(170%) !important;
-  box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.2),
-    inset 0 2px 4px rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.15) !important;
 }
 
-/* ══════════════════════════════════════
-   HERO — Vibrant gradient text
-   ══════════════════════════════════════ */
+/* ═══ HERO ═══ */
 .hero-title {
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.3) !important;
+  text-shadow: 0 2px 24px rgba(0,0,0,0.3) !important;
   letter-spacing: -0.025em !important;
 }
 
@@ -325,17 +301,13 @@ body::after {
   -webkit-backdrop-filter: blur(8px) saturate(130%) !important;
 }
 
-/* ══════════════════════════════════════
-   SCROLL PROGRESS — Iridescent bar
-   ══════════════════════════════════════ */
+/* ═══ SCROLL PROGRESS ═══ */
 .scroll-progress-bar {
   background: linear-gradient(90deg, rgb(var(--primary)), rgb(var(--accent)), rgb(var(--accent-2)), rgb(var(--primary))) !important;
   height: 2px !important;
 }
 
-/* ══════════════════════════════════════
-   THEME TOGGLE — Glass Switch
-   ══════════════════════════════════════ */
+/* ═══ THEME TOGGLE ═══ */
 .theme-switch {
   background: linear-gradient(180deg, var(--glass-tint-top), var(--glass-tint-bottom)) !important;
   border: 1px solid var(--glass-border) !important;
@@ -345,23 +317,17 @@ body::after {
   box-shadow: inset 0 1px 0 var(--glass-rim-top) !important;
 }
 
-/* ══════════════════════════════════════
-   SCROLL TO TOP — Glass FAB
-   ══════════════════════════════════════ */
+/* ═══ SCROLL TO TOP ═══ */
 .scroll-to-top-btn {
   background: linear-gradient(180deg, var(--glass-tint-top-hover), var(--glass-tint-bottom-hover)) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
   border-radius: 50% !important;
   backdrop-filter: blur(11px) saturate(170%) !important;
   -webkit-backdrop-filter: blur(11px) saturate(170%) !important;
-  box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 var(--glass-rim-top) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3), inset 0 1px 0 var(--glass-rim-top) !important;
 }
 
-/* ══════════════════════════════════════
-   TYPOGRAPHY — Liquid Glass style
-   ══════════════════════════════════════ */
+/* ═══ TYPOGRAPHY ═══ */
 .section-title {
   letter-spacing: -0.01em !important;
   text-wrap: balance !important;
@@ -374,11 +340,7 @@ body::after {
   color: rgb(var(--primary) / 0.7) !important;
 }
 
-
-/* ══════════════════════════════════════
-   GOOGLE SANS FLEX — Primary typeface
-   6 axes: wght, wdth, opsz, GRAD, ROND, slnt
-   ══════════════════════════════════════ */
+/* ═══ GOOGLE SANS FLEX ═══ */
 :root {
   --font-sans: 'Google Sans Flex', sans-serif;
   --font-heading: 'Google Sans Flex', sans-serif;
@@ -403,153 +365,26 @@ body, p, span, li, div, a {
   font-optical-sizing: auto;
 }
 
-/* ══════════════════════════════════════
-   LIQUID GLASS ENHANCEMENTS — iOS 26 Style
-   Fresnel rim + Edge highlights + Specular
-   ══════════════════════════════════════ */
-
-/* 1. Fresnel Rim — BRIGHT top/bottom edges, DARK sides
-   iOS 26 signature: bright specular hairline on horizontal edges,
-   dark refractive shadow on vertical edges.
-   INTENSIFIED for clear visibility.
-*/
-.glass-card::before {
-  content: '' !important;
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: 2 !important;
-  pointer-events: none !important;
-  border-radius: inherit !important;
-  padding: 1px !important;
-  background:
-    linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.45) 0,
-      rgba(0, 0, 0, 0) 8px,
-      rgba(0, 0, 0, 0) calc(100% - 8px),
-      rgba(0, 0, 0, 0.45) 100%
-    ),
-    linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.75) 0,
-      rgba(255, 255, 255, 0.75) 1px,
-      rgba(255, 255, 255, 0) 18px,
-      rgba(255, 255, 255, 0) calc(100% - 18px),
-      rgba(255, 255, 255, 0.55) calc(100% - 1px),
-      rgba(255, 255, 255, 0.55) 100%
-    ) !important;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
-  -webkit-mask-composite: xor !important;
-  mask-composite: exclude !important;
+/* ═══════════════════════════════════════
+   REAL LIQUID GLASS — SVG REFRACTION
+   ═══════════════════════════════════════ */
+@supports (backdrop-filter: blur(1px) url(#lg-refract)) {
+  .glass-card {
+    backdrop-filter: blur(20px) url(#lg-refract) saturate(185%) brightness(0.97) !important;
+    -webkit-backdrop-filter: blur(20px) url(#lg-refract) saturate(185%) brightness(0.97) !important;
+  }
+  .neon-card {
+    backdrop-filter: blur(22px) url(#lg-refract) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(22px) url(#lg-refract) saturate(190%) !important;
+  }
 }
 
-/* 1b. 3D Volume — thick glass depth illusion */
-.glass-card {
-  box-shadow:
-    0 24px 56px rgba(0, 0, 0, 0.55),
-    0 4px 12px rgba(0, 0, 0, 0.25),
-    inset 0 2px 0 rgba(255, 255, 255, 0.85),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.35),
-    inset 0 -2px 0 rgba(255, 255, 255, 0.20),
-    inset 0 -8px 20px rgba(0, 0, 0, 0.08) !important;
+/* Chromatic aberration on hover */
+.glass-card:hover {
+  filter: url(#lg-chromatic) !important;
 }
 
-/* 2. Neon card rim highlight */
-.neon-card::after {
-  content: '' !important;
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: 2 !important;
-  pointer-events: none !important;
-  border-radius: inherit !important;
-  padding: 1px !important;
-  background:
-    linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.25) 0,
-      rgba(0, 0, 0, 0) 5px,
-      rgba(0, 0, 0, 0) calc(100% - 5px),
-      rgba(0, 0, 0, 0.25) 100%
-    ),
-    linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.50) 0,
-      rgba(255, 255, 255, 0.50) 1px,
-      rgba(255, 255, 255, 0) 12px,
-      rgba(255, 255, 255, 0) calc(100% - 12px),
-      rgba(255, 255, 255, 0.35) calc(100% - 17px),
-      rgba(255, 255, 255, 0.35) 100%
-    ) !important;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
-  -webkit-mask-composite: xor !9important;
-  mask-composite: exclude !important;
-}
-
-/* 3. Nav bar rim — bottom edge highlight */
-.nav-glass::after {
-  content: '' !important;
-  position: absolute !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  height: 1px !important;
-  background: linear-gradient(
-    to right,
-    transparent 5%,
-    rgba(255, 255, 255, 0.15) 20%,
-    rgba(255, 255, 255, 0.25) 50%,
-    rgba(255, 255, 255, 0.15) 80%,
-    transparent 95%
-  ) !important;
-  pointer-events: none !important;
-}
-
-/* 4. Interactive specular highlight on hover — INTENSIFIED */
-.glass-card:hover::before {
-  background:
-    linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.40) 0,
-      rgba(0, 0, 0, 0) 8px,
-      rgba(0, 0, 0, 0) calc(100% - 8px),
-      rgba(0, 0, 0, 0.40) 100%
-    ),
-    linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.90) 0,
-      rgba(255, 255, 255, 0.90) 1px,
-      rgba(255, 255, 255, 0) 20px,
-      rgba(255, 255, 255, 0) calc(100% - 20px),
-      rgba(255, 255, 255, 0.65) calc(100% - 1px),
-      rgba(255, 255, 255, 0.65) 100%
-    ) !important;
-}
-
-/* 5. Nav bar — intensified Fresnel rim */
-.nav-glass {
-  box-shadow:
-    0 16px 40px rgba(0, 0, 0, 0.55),
-    0 4px 12px rgba(0, 0, 0, 0.35),
-    inset 0 2px 0 rgba(255, 255, 255, 0.85),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.20) !important;
-}
-
-/* 6. Neon card — intensified 3D depth */
-.neon-card {
-  box-shadow:
-    0 24px 90px rgba(0, 0, 0, 0.55),
-    0 4px 12px rgba(0, 0, 0, 0.30),
-    inset 0 2px 0 rgba(255, 255, 255, 0.80),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -10px 24px rgba(0, 0, 0, 0.10) !important;
-}
-
-
-/* ══════════════════════════════════════
-   FLEXBOX MASONRY
-   ══════════════════════════════════════ */
+/* ═══ FLEXBOX MASONRY ═══ */
 .grid.md\:grid-cols-2.lg\:grid-cols-3.gap-6.mb-16,
 .grid.lg\:grid-cols-3.gap-6.mb-16 {
   display: flex !important;
@@ -575,43 +410,7 @@ body, p, span, li, div, a {
   transform: translateY(0.8rem);
 }
 
-.grid.grid-cols-2.md\:grid-cols-4.gap-3 {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 0.75rem !important;
-  grid-template-columns: unset !important;
-}
-
-.grid.grid-cols-2.md\:grid-cols-4.gap-3 > * {
-  flex: 1 1 calc(25% - 0.75rem) !important;
-  min-width: 140px !important;
-}
-
-.grid.sm\:grid-cols-3.gap-6 {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 1.5rem !important;
-  grid-template-columns: unset !important;
-}
-
-.grid.sm\:grid-cols-3.gap-6 > * {
-  flex: 1 1 calc(33.333% - 1.5rem) !important;
-  min-width: 200px !important;
-}
-
-footer .grid.gap-10.sm\:grid-cols-2.lg\:grid-cols-3 {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 2.5rem !important;
-  grid-template-columns: unset !important;
-}
-
-footer .grid.gap-10.sm\:grid-cols-2.lg\:grid-cols-3 > * {
-  flex: 1 1 calc(33.333% - 2.5rem) !important;
-  min-width: 220px !important;
-}
-
-/* ── Entrance animation ── */
+/* Entrance animation */
 @keyframes glass-rise {
   from { opacity: 0; transform: translateY(40px) scale(0.98); }
   to { opacity: 1; transform: translateY(0) scale(1); }
@@ -627,7 +426,7 @@ footer .grid.gap-10.sm\:grid-cols-2.lg\:grid-cols-3 > * {
 .glass-card.p-6.h-full.flex.flex-col:nth-child(4) { animation-delay: 0.42s; }
 .glass-card.p-6.h-full.flex.flex-col:nth-child(5) { animation-delay: 0.52s; }
 
-/* ── Responsive ── */
+/* Responsive */
 @media (max-width: 1024px) {
   .grid.md\:grid-cols-2.lg\:grid-cols-3.gap-6.mb-16 > *,
   .grid.lg\:grid-cols-3.gap-6.mb-16 > * {
@@ -642,24 +441,4 @@ footer .grid.gap-10.sm\:grid-cols-2.lg\:grid-cols-3 > * {
     flex: 1 1 100% !important;
     max-width: 100% !important;
   }
-  .grid.grid-cols-2.md\:grid-cols-4.gap-3 > * {
-    flex: 1 1 calc(50% - 0.75rem) !important;
-  }
-}
-
-/* ═══ REAL LIQUID GLASS — SVG Refraction + Chromatic Aberration ═══ */
-@supports (backdrop-filter: blur(1px) url(#lg-refract)) {
-  .glass-card {
-    backdrop-filter: blur(20px) url(#lg-refract) saturate(185%) brightness(0.97) !important;
-    -webkit-backdrop-filter: blur(20px) url(#lg-refract) saturate(185%) brightness(0.97) !important;
-  }
-  .neon-card {
-    backdrop-filter: blur(22px) url(#lg-refract) saturate(190%) !important;
-    -webkit-backdrop-filter: blur(22px) url(#lg-refract) saturate(190%) !important;
-  }
-}
-
-/* Chromatic aberration on hover for glass cards */
-.glass-card:hover {
-  filter: url(#lg-chromatic) !important;
 }

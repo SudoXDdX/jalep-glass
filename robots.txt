@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Sitemap: https://suxd-dev.github.io/jalep-mano/sitemap.xml
+Sitemap: https://suxd-dev.github.io/jalep-glass/sitemap.xml
 
 User-agent: Googlebot
 Allow: /

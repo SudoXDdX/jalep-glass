@@ -1,9 +1,9 @@
 {
-  "name": "JALEP Glass — Liquid Glass Edition",
-  "short_name": "JALEP Glass",
-  "description": "JALEP Corporação — Apple Liquid Glass Design",
-  "start_url": "/jalep-mano/",
-  "scope": "/jalep-mano/",
+  "name": "JALEP Corporação",
+  "short_name": "JALEP",
+  "description": "Assistência Técnica Profissional — Diagnóstico preciso. Reparo certeiro. Zero improviso.",
+  "start_url": "/jalep-glass/",
+  "scope": "/jalep-glass/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#0E1019",
@@ -16,57 +16,57 @@
   "dir": "ltr",
   "icons": [
     {
-      "src": "/jalep-mano/icons/icon-16x16.png",
+      "src": "/jalep-glass/icons/icon-16x16.png",
       "sizes": "16x16",
       "type": "image/png"
     },
     {
-      "src": "/jalep-mano/icons/icon-32x32.png",
+      "src": "/jalep-glass/icons/icon-32x32.png",
       "sizes": "32x32",
       "type": "image/png"
     },
     {
-      "src": "/jalep-mano/icons/icon-72x72.png",
+      "src": "/jalep-glass/icons/icon-72x72.png",
       "sizes": "72x72",
       "type": "image/png"
     },
     {
-      "src": "/jalep-mano/icons/icon-96x96.png",
+      "src": "/jalep-glass/icons/icon-96x96.png",
       "sizes": "96x96",
       "type": "image/png"
     },
     {
-      "src": "/jalep-mano/icons/icon-128x128.png",
+      "src": "/jalep-glass/icons/icon-128x128.png",
       "sizes": "128x128",
       "type": "image/png"
     },
     {
-      "src": "/jalep-mano/icons/icon-144x144.png",
+      "src": "/jalep-glass/icons/icon-144x144.png",
       "sizes": "144x144",
       "type": "image/png"
     },
     {
-      "src": "/jalep-mano/icons/icon-152x152.png",
+      "src": "/jalep-glass/icons/icon-152x152.png",
       "sizes": "152x152",
       "type": "image/png"
     },
     {
-      "src": "/jalep-mano/icons/icon-192x192.png",
+      "src": "/jalep-glass/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/jalep-mano/icons/icon-384x384.png",
+      "src": "/jalep-glass/icons/icon-384x384.png",
       "sizes": "384x384",
       "type": "image/png"
     },
     {
-      "src": "/jalep-mano/icons/icon-512x512.png",
+      "src": "/jalep-glass/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "/jalep-mano/icons/icon-512x512.png",
+      "src": "/jalep-glass/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -75,30 +75,30 @@
   "shortcuts": [
     {
       "name": "Serviços",
-      "url": "/jalep-mano/servicos",
+      "url": "/jalep-glass/servicos",
       "icons": [
         {
-          "src": "/jalep-mano/icons/icon-96x96.png",
+          "src": "/jalep-glass/icons/icon-96x96.png",
           "sizes": "96x96"
         }
       ]
     },
     {
       "name": "Orçamento",
-      "url": "/jalep-mano/#budget",
+      "url": "/jalep-glass/#budget",
       "icons": [
         {
-          "src": "/jalep-mano/icons/icon-96x96.png",
+          "src": "/jalep-glass/icons/icon-96x96.png",
           "sizes": "96x96"
         }
       ]
     },
     {
       "name": "Lab",
-      "url": "/jalep-mano/lab",
+      "url": "/jalep-glass/lab",
       "icons": [
         {
-          "src": "/jalep-mano/icons/icon-96x96.png",
+          "src": "/jalep-glass/icons/icon-96x96.png",
           "sizes": "96x96"
         }
       ]
